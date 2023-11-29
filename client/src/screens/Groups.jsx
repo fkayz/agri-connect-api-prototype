@@ -49,6 +49,7 @@ const Groups = () => {
                             {/* group 1 */}
                             
                             {
+                                groupsData.length === 0 ? <p className='text-muted'>No groups are available yet!</p> :
                                 isLoading && 
                                 
                                 <div className='mx-2'>

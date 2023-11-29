@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes, Model) => {
         },
         postImage: {
             type: DataTypes.TEXT
+        },
+
+        postVideo: {
+            type: DataTypes.TEXT
         }
     }, {sequelize, modelName: 'post'});
 

@@ -50,6 +50,7 @@ const Post = (props) => {
                 { props.post.postContent }
             </p>
             { props.post.postImage && <img src={props.post?.postImage} width="100%" className='rounded' /> }
+            { props.post.postVideo && <video className='rounded' src={props.post?.postVideo} width='100%' controls></video> }
             <div className='post-reactions mt-3'>
                 <div className='reaction'>
                     { props.post.likes.length > 0  

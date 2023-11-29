@@ -1,6 +1,6 @@
 const db = require('../models')
 const Follow = db.followers
-
+const User = db.users
 
 
 const addFollow = async(req, res) => {
@@ -14,7 +14,14 @@ const addFollow = async(req, res) => {
 }
 
 const getAllFollows = async(req, res) => {
-    const follows = await Follow.findAll({})
+    const currentUserId = req.params.id
+    const follows = await Follow.findAll({ where: { follower_id: currentUserId }, 
+        attributes:['followed_id'], 
+        include: {
+            model: User,
+            attributes: ['firstName', 'lastName']
+        }, 
+    })
     res.status(200).json({ message: 'follows fetched sucessfully!', data: follows })
 }
 

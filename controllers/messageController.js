@@ -14,7 +14,8 @@ const addMessage = async(req, res) => {
 }
 
 const getAllMessages = async(req, res) => {
-    const messages = await Message.findAll({});
+    const community_id = req.params.id
+    const messages = await Message.findAll({ where: { community_id: community_id } });
     res.status(200).json({ messageStatus: 'message fetched successfully!', messages: messages });
 }
 
@@ -22,6 +23,8 @@ const getOneMessage = async(req, res) => {
     const message = await Message.findOne({ where: {id: req.params.id} });
     res.status(200).json({ messageStatus: 'message fetched successfully!', message: message });
 }
+
+
 
 const updateMessage = async(req, res) => {
     const message = await Message.update(req.body, { where: {id: req.params.id} });

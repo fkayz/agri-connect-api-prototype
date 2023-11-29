@@ -9,6 +9,7 @@ const addPost = async(req, res) => {
     const postInfo = {
         postContent: req.body.postContent,
         postImage: req.body.postImage,
+        postVideo: req.body.postVideo,
         post_author_id: req.body.post_author_id
     };
 

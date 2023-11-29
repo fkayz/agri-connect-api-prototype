@@ -4,7 +4,7 @@ import axios from 'axios'
 import Navbar from '../components/Navbar'
 import SideNavBar from '../components/SideNavBar'
 import getCookie from '../hooks/getCookie'
-
+import productImg from '../assets/post-user-1.jpeg'
 
 
 const AddProduct = () => {
@@ -52,24 +52,35 @@ const AddProduct = () => {
 
                     <div className='col-md-9'>
                         <h3 className='text-muted mb-2'>Add New Product</h3>
-                        <div className='bg-white p-4 rounded'>
-                            <form onSubmit={createProductHandle}>
-                                <div className='mb-3'>
-                                    <input value={productName} onChange={(e) => setProductName(e.target.value)} type='text' placeholder='Enter product name' className='form-control' />
+                        
+                        <div className='row mt-5'>
+                            <div className='col-md-3'>
+                                <div>
+                                    <img src={productImg} width='100%' className='rounded' alt='product image' />
                                 </div>
+                            </div>
 
-                                <div className='mb-3'>
-                                    <textarea  value={productDescription} onChange={(e) => setProductDescription(e.target.value)} className='form-control' placeholder='Enter product description'></textarea>
-                                </div>
+                            <div className='col-md-9'>
+                                <div className='bg-white p-4 rounded px-4'>
+                                    <form onSubmit={createProductHandle}>
+                                        <div className='mb-3'>
+                                            <input value={productName} onChange={(e) => setProductName(e.target.value)} type='text' placeholder='Enter product name' className='form-control' />
+                                        </div>
 
-                                <div className='mb-3'>
-                                    <input  value={productPrice} onChange={(e) => setProductPrice(e.target.value)} type='number' placeholder='Enter product price' className='form-control' />
-                                </div>
+                                        <div className='mb-3'>
+                                            <textarea  value={productDescription} onChange={(e) => setProductDescription(e.target.value)} className='form-control' placeholder='Enter product description'></textarea>
+                                        </div>
 
-                                <div className='mb-3'>
-                                    <button type='submit' className='create-product-btn btn btn-success mx-auto d-block mt-3'>Create</button>
+                                        <div className='mb-3'>
+                                            <input  value={productPrice} onChange={(e) => setProductPrice(e.target.value)} type='number' placeholder='Enter product price' className='form-control' />
+                                        </div>
+
+                                        <div className='mb-3'>
+                                            <button type='submit' className='create-product-btn btn btn-success mx-auto d-block mt-3'>Create</button>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>

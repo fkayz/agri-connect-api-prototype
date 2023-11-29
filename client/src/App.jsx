@@ -10,6 +10,7 @@ import Profile from './screens/Profile'
 import ProductDetail from './screens/ProductDetail'
 import AddProduct from './screens/AddProduct'
 import Cart from './screens/Cart'
+import GroupChat from './screens/GroupChat'
 
 const App = () => {
 
@@ -27,6 +28,7 @@ const App = () => {
             <Route exact path="/marketplace/product/:id" element={<ProductDetail />}></Route>
             <Route exact path="/product/add" element={<AddProduct />}></Route>
             <Route exact path="/product/cart" element={<Cart />}></Route>
+            <Route exact path="/groups/:id/chat" element={<GroupChat />}></Route>
           </Routes>
       </Router>
     </>

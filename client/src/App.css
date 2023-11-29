@@ -523,3 +523,85 @@ article{
     transform: scale(1.1);
 
 }
+
+.uploadPhotoPlaceholder{
+    height: 400;
+    width: 400;
+    background-color: aliceblue;
+    border-radius: 10px;
+}
+
+.uploadPhotoBtn{
+    width: 100%;
+}
+
+.chat{
+    display: flex;
+    flex-direction: column;
+}
+
+.top-part-content{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    align-items: center;
+}
+
+.top-part-chat-info{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 8;
+}
+
+.chat-action-btn{
+    float: right;
+}
+
+.top-part{
+    flex-grow: 1;
+}
+
+.chat-balloon-top-part-info{
+    display: flex;
+    flex-direction: column;
+}
+
+.middle-part{
+    display: flex;
+    flex-direction: column;
+    height: 550px;
+    overflow: scroll;
+}
+
+.last-part{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-balloon-sender{
+    width: 50%;
+}
+
+.chat-balloon-top-part{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.chat-user-name{
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.chat-balloon-receiver{
+    position: relative;
+    width: 50%;
+    left: 50%;
+}
+
+.balloons{
+    display: flex;
+    justify-content: space-between;
+}

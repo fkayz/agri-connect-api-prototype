@@ -47,6 +47,7 @@ const Martketplace = () => {
                         <a href='/product/add' className='btn btn-success mb-3'>Create New Product</a>
                         <div className='row'>
                             {
+                                products.length === 0 ? <p className='text-muted'>No products are available yet!</p> :
                                 isLoading && 
                                 <div className='mx-2'>
                                     <div className="spinner-border mt-5 text-info" role="status">
