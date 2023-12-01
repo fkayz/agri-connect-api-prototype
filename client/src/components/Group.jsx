@@ -17,7 +17,7 @@ const Group = ({ group }) => {
             </div>
             {/* middle part */}
             <img src={group.profileCover} className='group-main-profile rounded' />
-            <button className='btn btn-warning mt-3 mx-auto d-block'>Join Group</button>
+            <a href={`/groups/chat/${group.id}`} className='btn btn-warning mt-3 mx-auto d-block'>Join Group</a>
         </div>
     </div>
   )

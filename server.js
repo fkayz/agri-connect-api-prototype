@@ -38,7 +38,7 @@ app.use('/api/likes/', likeRouter);
 app.use('/api/products/', productRouter);
 app.use('/api/product_status/', productStatusRouter);
 app.use('/api/communities/', communityRouter);
-app.use('/api/messages/', messageRouter);
+app.use('/api/groups/messages/', messageRouter);
 app.use('/api/follows', followRouter);
 app.use('/api/users/login/', signInRouter);
 app.use('/api/users/logout', signOutRouter);

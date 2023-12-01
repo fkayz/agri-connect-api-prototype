@@ -582,6 +582,8 @@ article{
 
 .chat-balloon-sender{
     width: 50%;
+    border-bottom-right-radius: 45px;
+    border-top-left-radius: 20px;
 }
 
 .chat-balloon-top-part{
@@ -599,9 +601,15 @@ article{
     position: relative;
     width: 50%;
     left: 50%;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 45px;
 }
 
 .balloons{
     display: flex;
     justify-content: space-between;
+}
+
+.group-profileCover{
+    object-fit: cover;
 }

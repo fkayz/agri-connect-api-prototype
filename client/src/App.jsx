@@ -28,7 +28,7 @@ const App = () => {
             <Route exact path="/marketplace/product/:id" element={<ProductDetail />}></Route>
             <Route exact path="/product/add" element={<AddProduct />}></Route>
             <Route exact path="/product/cart" element={<Cart />}></Route>
-            <Route exact path="/groups/:id/chat" element={<GroupChat />}></Route>
+            <Route exact path="/groups/chat/:id" element={<GroupChat />}></Route>
           </Routes>
       </Router>
     </>

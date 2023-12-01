@@ -1,94 +1,172 @@
-import React from 'react'
+import React from 'react';
+import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import SideNavBar from '../components/SideNavBar'
-import chatProfile from '../assets/businessLogo.png'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
+import MessageBalloonSender from '../components/MessageBalloonSender'
+import getCookie from '../hooks/getCookie';
+import MessageBalloonReceiver from '../components/MessageBalloonReceiver';
+import GroupInfo from '../components/GroupInfo';
 
 const GroupChat = () => {
-  return (
-    <>
-        <Navbar />
 
-        <div className='container'>
-            <div className='row'>
-                <div className='col-md-3'>
-                    <SideNavBar />
-                </div>
+    const [ messages, setMessages ] = useState([])
+    const [ isLoading, setIsLoading ] = useState(false)
+    const [ error, setError ] = useState(false)
 
-                <div className='col-md-9'>
-                    <div className='chat bg-white rounded'>
-                        {/* top part */}
-                        <div className='top-part text-white bg-success p-3 rounded'>
-                            <div className='top-part-content'>
-                                <a href='/groups' className='text-white'>
-                                    <i className='fa fa-arrow-left fa-2x'></i>
-                                </a>
-                                <img src={chatProfile} width={50} height={50} className='rounded-circle' />
-                                <div className='top-part-chat-info mt-3'>
-                                    <h5 className=''>Alimi Tithandizane</h5>
-                                    <p className='text-white'><b>100 Members</b></p>
+    const [ communityDetails, setCommunityDetails ] = useState('')
+    const [ communityLoading, setCommunityLoading ] = useState(false)
+    const [ communityError, setCommunityError ] = useState(false)
+
+    const [ currentUser, setCurrentUser ] = useState(JSON.parse(getCookie('currentUser')))
+    const [ chatMessage, setChatMessage ] = useState('')
+    const [ sendingMsgLoading, setSendingMsgLoading ] = useState(false)
+    const [ sendingMsgError, setSendingMsgError ] = useState(false)
+
+    const [ syncMessages, setSyncMessages ] = useState(true)
+
+    const groupChatID = useParams()
+
+
+    useEffect(() => {
+
+        const getCommunityDetails = async () => {
+            try{
+                setCommunityLoading(true)
+                const community = await axios.get(`http://127.0.0.1:8000/api/communities/${groupChatID.id}`)
+
+                if(community.status === 200){
+                    setCommunityDetails(community.data.community)
+                }
+            }catch(err){
+                setCommunityError(true)
+                console.log(err)
+            }finally{
+                setCommunityLoading(false)
+            }
+        }
+
+        const getAllChatMessages = async () => {
+            try{
+                setIsLoading(true)
+                const chatMessages = await axios.get(`http://127.0.0.1:8000/api/groups/messages/${groupChatID.id}`)
+    
+                if(chatMessages.status === 200){
+                    setMessages(chatMessages.data.messages)
+                }
+            }catch(err){
+                setError(true)
+                console.log(err)
+            }finally{
+                setIsLoading(false)
+            }
+        }
+
+        getCommunityDetails()
+        getAllChatMessages()
+
+    }, [syncMessages])
+
+    const sendMessage = async () => {
+        setSyncMessages(true)
+        try{
+            setSendingMsgLoading(true)
+            const msgBody = { author_id: currentUser.id, community_id: groupChatID.id, message: chatMessage }
+            const msg = await axios.post('http://127.0.0.1:8000/api/groups/messages/add', msgBody)
+
+            if(msg.status === 200){
+                setChatMessage('')
+                const msgChat = document.querySelector('.middle-part')
+                msgChat.scrollTop = msgChat.scrollHeight
+                console.log('message sent')
+                //setMessages()
+            }
+        }catch(err){
+            setSendingMsgError(true)
+            alert('Error: sending message, try again later!')
+        }finally{
+            setSyncMessages(false)
+            setSendingMsgLoading(false)
+        }
+    }
+
+    return (
+        <>
+            <Navbar />
+
+            <div className='container'>
+                <div className='row'>
+                    <div className='col-md-3'>
+                        <SideNavBar />
+                    </div>
+
+                    <div className='col-md-9'>
+                        <div className='chat bg-white rounded'>
+                            {/* top part */}
+                            <div className='top-part text-white bg-success p-3 rounded'>
+                                <div className='top-part-content'>
+                                    <a href='/groups' className='text-white'>
+                                        <i className='fa fa-arrow-left fa-2x'></i>
+                                    </a>
+                                    {
+                                        communityLoading 
+                                        && 
+                                        <p>Getting group info...</p>
+                                        ||
+                                        communityError
+                                        &&
+                                        <p>Error getting group info, try refreshing the page or check your connection</p>
+                                        ||
+                                        !communityLoading && !communityError
+                                        &&
+                                        <GroupInfo communityDetails={communityDetails} />
+                                    }
+                                    {/* <i className='fa fa-ellipsis-vertical'></i> */}
                                 </div>
-                                {/* <i className='fa fa-ellipsis-vertical'></i> */}
                             </div>
-                        </div>
-                        {/* middle part */}
-                        <div className='middle-part bg-white p-5'>
-                            {/* chat balloon for sender */}
-                            <div className='chat-balloon-sender bg-secondary text-white rounded p-2 mb-4'>
-                                <div className='chat-balloon-top-part mb-0'>
-                                    <img src={chatProfile} width={30} height={30} className='rounded-circle' />
-                                    <div className='chat-balloon-top-part-info'>
-                                        <p className='chat-user-name mb-0'>Angela Kayange</p>
-                                        <small>16 dec 2023</small>
-                                    </div>
-                                </div>
-                                <hr />
-                                <p>
-                                    Turpis egestas integer eget aliquet nibh praesent tristique. Volutpat consequat mauris nunc congue nisi vitae suscipit. Venenatis lectus magna fringilla urna porttitor rhoncus. 
-                                </p>
-                            </div>
-
-                            {/* chat balloon for receiver */}
-                            <div className='chat-balloon-receiver bg-primary text-white rounded p-2 mb-3'>
-                                <div className='chat-balloon-top-part mb-0'>
-                                    <img src={chatProfile} width={30} height={30} className='rounded-circle' />
-                                    <div className='chat-balloon-top-part-info'>
-                                        <p className='chat-user-name mb-0'>Jackson Mbewe</p>
-                                        <small>24 jun 2023</small>
-                                    </div>
-                                </div>
-                                <hr />
-                                <p>
-                                    Turpis egestas integer eget aliquet nibh praesent tristique. Volutpat consequat mauris nunc congue nisi vitae suscipit. Venenatis lectus magna fringilla urna porttitor rhoncus. 
-                                </p>
+                            {/* middle part */}
+                            <div className='middle-part bg-white p-5'>
+                                {/* chat balloon for sender */}
+                                {
+                                    isLoading 
+                                    &&
+                                    <p className='text-center'>Syncing chat message...</p> 
+                                    ||
+                                    error 
+                                    && 
+                                    <p className='text-danger text-center'>Error syncing messages. <br/>Make sure you are connected to the internet or refresh the page.</p> 
+                                    ||
+                                    messages.length > 0 
+                                    ?
+                                    !isLoading && !error && messages.map((message) => (
+                                        message.user.id === currentUser.id ? <MessageBalloonSender message={message} /> : <MessageBalloonReceiver message={message} />
+                                    ))
+                                    :
+                                    <p className='text-muted text-center'>No messages found, be the first to start a conversation</p>
+                                }
+                                
                             </div>
 
-                            {/* chat balloon for sender */}
-                            <div className='chat-balloon-sender bg-secondary text-white rounded p-2 mb-4'>
-                                <div className='chat-balloon-top-part mb-0'>
-                                    <img src={chatProfile} width={30} height={30} className='rounded-circle' />
-                                    <p className='chat-user-name'>Jackson Mbewe</p>
-                                </div>
-                                <hr />
-                                <p>
-                                    Turpis egestas integer eget aliquet nibh praesent tristique. Volutpat consequat mauris nunc congue nisi vitae suscipit. Venenatis lectus magna fringilla urna porttitor rhoncus. 
-                                </p>
+
+                            {/* last part */}
+                            <div className='last-part p-3'>
+                                <i className='fa fa-smile fa-2x'></i>
+                                <input type='text' value={chatMessage} onChange={(e) => setChatMessage(e.target.value)} placeholder='Enter your message here...' className='form-control' />
+                                {
+                                    sendingMsgLoading 
+                                    ?
+                                    <button className='btn btn-success' disabled>Sending...</button>
+                                    :
+                                    <button onClick={sendMessage} className='btn btn-success'>Send</button>
+                                }
                             </div>
-                            
-                        </div>
-
-
-                        {/* last part */}
-                        <div className='last-part p-3'>
-                            <i className='fa fa-smile fa-2x'></i>
-                            <input type='text' placeholder='Enter your messahe here...' className='form-control' />
-                            <button className='btn btn-success'>Send</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default GroupChat

@@ -32,6 +32,9 @@ const Home = () => {
     const [ uploadImage, setUploadImage ] = useState('')
     const [ uploadVideo, setUploadVideo ] = useState('')
 
+    const [ chatbotInput, setChatBotInput ] = useState('')
+    const [ chatbotOutput, setChatBotOutput ] = useState('Generated answers will be displayed here')
+    const [ chatbotLoader, setChabotLoader ] = useState(false)
 
     let postImageLink = ''
     let postVideoLink = ''
@@ -268,14 +271,33 @@ const Home = () => {
     // chatbot
 
     const initializeGPT = async () => {
-        const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true })
-        const completion = await openai.chat.completions.create({
-            messages: [ { role: 'system', content: 'You are a helpful assistant' } ],
-            model: 'gpt-3.5-turbo',
-            max_tokens: 1024
-        })
+        const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true })
+        
+        try{
+            setChabotLoader(true)
+            setChatBotOutput('Thinking 🤔 wait for a few moment...')
+            const completion = await openai.chat.completions.create({
+                messages: [ 
+                    { role: 'system', content: 'You are a helpful assistant for farming related questions and techniques only' }, 
+                    { role: 'user', content: `${chatbotInput}` } 
+                ],
+                model: 'gpt-3.5-turbo',
+                max_tokens: 1024,
+                temperature: 1
+            })
 
-        console.log(completion.choices[0])
+            setChatBotOutput(completion.choices[0].message.content)
+        }catch(err){
+            setChatBotOutput('There was an error while generating your response. Try again later!')
+        }finally{
+            setChabotLoader(false)
+        }
+
+            // alert('Ask a question first or any suggestion for our bot to help you. Thank You!')
+    }
+
+    const clearChatbotOutput = () => {
+        setChatBotOutput('Generated answers will be displayed here')
     }
 
 
@@ -426,17 +448,33 @@ const Home = () => {
                 <div class="modal-dialog">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="chatBotLabel">Interact with our AI</h5>
+                        <h5 class="modal-title" id="chatBotLabel">Interact with our AGC-BOT AI</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-center">
-                        <input type='text' placeholder='Ask any question about farming' className='form-control' />
+                        <input type='text' value={chatbotInput} onChange={(e) => setChatBotInput(e.target.value)} placeholder='Ask any question about farming' className='form-control' />
                         <div className='bg-secondary text-white p-5 mt-3 rounded'>
-                            Generated answers will be displayed here
+                            {chatbotOutput}
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" onClick={initializeGPT} class="btn btn-primary" data-bs-dismiss="modal">Ask</button>
+                        {
+                            chatbotLoader ?
+                            <button type="button" onClick={initializeGPT} class="btn btn-primary" disabled>
+                                Thinking...
+                                <small class="spinner-grow text-danger spinner-grow-sm mx-2" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </small>
+                            </button>
+                            :
+                            <button type="button" onClick={initializeGPT} class="btn btn-primary">Ask</button> 
+                        }
+
+                        {
+                            chatbotOutput !== 'Generated answers will be displayed here' && chatbotOutput !== 'Thinking 🤔 wait for a few moment...' &&
+                            <button type="button" class="btn btn-secondary" onClick={clearChatbotOutput}>Clear</button>
+
+                        }
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                     </div>
                     </div>
