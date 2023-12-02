@@ -36,6 +36,7 @@ db.product_status = require('./ProductStatus')(sequelize, DataTypes, Model);
 db.communities = require('./Community')(sequelize, DataTypes, Model);
 db.messages = require('./Message')(sequelize, DataTypes, Model);
 db.followers = require('../models/Follower')(sequelize, DataTypes, Model)
+db.saved_posts = require('../models/SavedPosts')(sequelize, DataTypes, Model)
 //db.community_participants = require('./CommunityParticipant')(sequelize, DataTypes, Model);
 
 
@@ -102,5 +103,14 @@ db.messages.belongsTo(db.communities, { foreignKey: 'community_id' });
 // messages -> user(user has many messages)
 db.users.hasMany(db.messages, { foreignKey: 'author_id' });
 db.messages.belongsTo(db.users, { foreignKey: 'author_id' });
+
+// saved_posts -> user(user has one saved post)
+db.users.hasOne(db.saved_posts, { foreignKey: 'user_id' })
+db.saved_posts.belongsTo(db.users, { foreignKey: 'user_id' })
+
+// saved_posts -> post(a post can only be saved once)
+db.posts.hasOne(db.saved_posts, { foreignKey: 'post_id' })
+db.saved_posts.belongsTo(db.posts, { foreignKey: 'post_id' })
+
 
 module.exports = db;

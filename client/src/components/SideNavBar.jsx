@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
+import getCookie from '../hooks/getCookie';
 import agriLogo from '../assets/agri-logo.png'
 import businessLogo from '../assets/businessLogo.png'
 
+
 const SideNavBar = () => {
+
+    const [ currentUser, setCurrentUser ] = useState(JSON.parse(getCookie('currentUser')))
+
     return (
         <div className='col-md-3'>
             {/* nav links */}
@@ -39,7 +44,7 @@ const SideNavBar = () => {
                         <i className='nav-link-icon fa fa-star text-success'></i>
                     </div>
                     <div>
-                        <a href='#' className='nav-link-text'>Saved</a>
+                        <a href={`/posts/saved/${currentUser.id}`} className='nav-link-text'>Saved</a>
                     </div>
                 </div>
                 {/* groups */}

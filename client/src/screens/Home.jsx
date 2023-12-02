@@ -271,7 +271,7 @@ const Home = () => {
     // chatbot
 
     const initializeGPT = async () => {
-        const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true })
+        const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true })
         
         try{
             setChabotLoader(true)
@@ -288,6 +288,7 @@ const Home = () => {
 
             setChatBotOutput(completion.choices[0].message.content)
         }catch(err){
+            console.log('chatbot error', err)
             setChatBotOutput('There was an error while generating your response. Try again later!')
         }finally{
             setChabotLoader(false)
@@ -342,8 +343,8 @@ const Home = () => {
                                 </div>
                             </div> ||
                             error && <div className='mt-5 text-center'>Error getting posts, check your internet connection or try to refresh the page!</div> ||
-                            isLoading === false && error === false && posts.map((post) => (
-                                <Post post={post} commentAuthor={currentUser} key={post.id} />
+                            !isLoading && !error && posts.map((post) => (
+                                <Post post={post} commentAuthor={currentUser} page='home' key={post.id} />
                             ))
                         }
                     </div>

@@ -11,6 +11,7 @@ import ProductDetail from './screens/ProductDetail'
 import AddProduct from './screens/AddProduct'
 import Cart from './screens/Cart'
 import GroupChat from './screens/GroupChat'
+import { Saved } from './screens/Saved'
 
 const App = () => {
 
@@ -29,6 +30,7 @@ const App = () => {
             <Route exact path="/product/add" element={<AddProduct />}></Route>
             <Route exact path="/product/cart" element={<Cart />}></Route>
             <Route exact path="/groups/chat/:id" element={<GroupChat />}></Route>
+            <Route exact path="/posts/saved/:id" element={<Saved />}></Route>
           </Routes>
       </Router>
     </>

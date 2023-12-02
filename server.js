@@ -16,6 +16,7 @@ const messageRouter = require('./routes/messageRouter');
 const followRouter = require('./routes/followRouter');
 const signInRouter = require('./routes/signInRouter');
 const signOutRouter = require('./routes/signOutRouter');
+const savedPostRouter = require('./routes/savedPostRouter');
 
 
 // middleware
@@ -42,6 +43,7 @@ app.use('/api/groups/messages/', messageRouter);
 app.use('/api/follows', followRouter);
 app.use('/api/users/login/', signInRouter);
 app.use('/api/users/logout', signOutRouter);
+app.use('/api/save_post/', savedPostRouter);
 
 
 // spin up the server
