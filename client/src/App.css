@@ -613,3 +613,11 @@ article{
 .group-profileCover{
     object-fit: cover;
 }
+
+.add-product-inpt{
+    background-color: rgb(255, 255, 255);
+}
+
+.add-product-inpt input:focus{
+    background-color: aliceblue;
+}
