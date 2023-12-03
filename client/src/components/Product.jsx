@@ -34,8 +34,8 @@ const Product = (props) => {
         {/* product image */}
         {
             props.page === 'productDetail' 
-            ? <img src={props.product.productImage} width='100%' className='rounded' />
-            : <img src={props.product.productImage} width={435} height={300} className='rounded' />
+            ? <img src={props.product.productImage} width='100%' className='product-img rounded' />
+            : <img src={props.product.productImage} width={435} height={300} className='product-img rounded' />
         }
         
         <p className='product-name text-muted mt-3'>{props.product.name}</p>
@@ -46,7 +46,7 @@ const Product = (props) => {
             props.product.product_status?.status === 'available' && <div className='product-status-badge bg-info text-white p-2'>Available</div>
         }
 
-        <p>MWK { props.product.price }</p>
+        <p className='mt-2'><b>MWK</b> { props.product.price }</p>
         {
             props.page === 'productDetail' 
             ? props.product.product_status?.status !== 'sold' ? <a href={product_link} className='btn btn-success mx-auto d-block mt-3'>Add to Cart</a> : ''

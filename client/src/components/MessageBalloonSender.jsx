@@ -7,7 +7,7 @@ const MessageBalloon = (props) => {
             <div className='chat-balloon-top-part mb-0'>
                 <img src={props.message.user.profilePic} width={30} height={30} className='rounded-circle' />
                 <div className='chat-balloon-top-part-info'>
-                    <p className='chat-user-name mb-0'>{`${props.message.user.firstName} ${props.message.user.lastName}`}</p>
+                    <p className='chat-user-name mb-0'>You</p>
                     <small>{new Date(props.message.createdAt).toDateString()}</small>
                 </div>
             </div>

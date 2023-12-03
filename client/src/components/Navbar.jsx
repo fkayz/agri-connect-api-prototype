@@ -1,7 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import userLogo from '../assets/user.jpg'
 import getCookie from '../hooks/getCookie'
 import removeCookie from '../hooks/removeCookie'
 

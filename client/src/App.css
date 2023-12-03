@@ -621,3 +621,7 @@ article{
 .add-product-inpt input:focus{
     background-color: aliceblue;
 }
+
+.product-img{
+    object-fit: cover;
+}

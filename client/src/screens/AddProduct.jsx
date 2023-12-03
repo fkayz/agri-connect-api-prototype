@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar'
 import SideNavBar from '../components/SideNavBar'
 import getCookie from '../hooks/getCookie'
 import addProductImg from '../assets/add_product.png'
+import { storage } from '../firebaseConfig'
 
 
 const AddProduct = () => {
@@ -13,39 +14,46 @@ const AddProduct = () => {
     const [ productName, setProductName ] = useState('')
     const [ productDescription, setProductDescription ] = useState('')
     const [ productPrice, setProductPrice ] = useState('')
-    const [ productImgLink, setProductLink ] = useState('')
     const [ productImg, setProductImg ] = useState('')
+    const [ uploadingToFirebase, setUploadingToFirebase ] = useState(false)
+    const [ savingToDB, setSavingToDB ] = useState(false)
+    const [ error, setError ] = useState(false)
     const [ productImgUploadPrg, setProductImgUploadPrg ] = useState(0)
 
     const [ currentUser, setCurrentUser ] = useState(JSON.parse(getCookie('currentUser')))
 
     const navigate = useNavigate()
 
-    const saveChanges = async () => {
+    const saveChanges = async (productImgLink) => {
         try{
             const productData = {
                 product_owner_id: currentUser.id,
-                product_status_id: 1,
+                product_status_id: 3,
                 name: productName,
                 description: productDescription,
                 price: productPrice,
                 productImage: productImgLink
             }
+            setSavingToDB(true)
             const product = await axios.post('http://127.0.0.1:8000/api/products/add', productData)
 
             if(product.status === 200){
                 navigate('/marketplace')
             }
         }catch(err){
+            setError(true)
             alert('error creating product, try again')
             console.log('error  creating product', err)
+        }finally{
+            setSavingToDB(false)
         }
     }
 
     const uploadProductImageToFirebase = (img) => {
-        const storageRef = ref('/uploaded_files/product/image/', img.name)
+        setUploadingToFirebase(true)
+        const storageRef = ref(storage, `/uploaded_files/product/image/${img.name}`)
         const uploadTask = uploadBytesResumable(storageRef, img)
-
+        console.log('okay stage 1')
         uploadTask.on('state_changed', 
             (snapshot) => {
                 const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
@@ -54,17 +62,18 @@ const AddProduct = () => {
             (err) => { return alert('failed to upload img. try again', err) },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref)
-                .then(async (url) => {
-                    setProductLink(url);
-                    await saveChanges()
+                .then((url) => {
+                    console.log('uploaded')
+                    setUploadingToFirebase(false)
+                    saveChanges(url);
                 })
             }
         )
     }
 
-    const saveToDB = async (event) => {
+    const saveToDB = (event) => {
         event.preventDefault()
-        await uploadProductImageToFirebase(productImg)
+        uploadProductImageToFirebase(productImg)
     }
 
     const previewProductImage = (img) => {
@@ -99,7 +108,7 @@ const AddProduct = () => {
                         <div className='row mt-5'>
                             <div className='col-md-3'>
                                 <div>
-                                    <img src={addProductImg} id='imgPreview' width='100%' className='rounded' alt='product image' />
+                                    <img src={addProductImg} id='imgPreview' width='100%' className='product-img rounded' alt='product image' />
                                     {/* <h3 contentEditable id='productNameEditable'>Enter product name</h3> */}
                                 </div>
                             </div>
@@ -125,7 +134,15 @@ const AddProduct = () => {
                                         </div>
 
                                         <div className='mb-3'>
-                                            <button type='submit' className='create-product-btn btn btn-success mx-auto d-block mt-3'>Create</button>
+                                            {
+                                                uploadingToFirebase
+                                                ? <button className='create-product-btn btn btn-success mx-auto d-block mt-3' disabled>
+                                                    {
+                                                        savingToDB ? 'Saving...' : `Creating...${productImgUploadPrg}%`
+                                                    }
+                                                </button>
+                                                : <button type='submit' className='create-product-btn btn btn-success mx-auto d-block mt-3'>Create</button>
+                                            }
                                         </div>
                                     </form>
                                 </div>

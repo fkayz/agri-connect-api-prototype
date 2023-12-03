@@ -28,7 +28,7 @@ const addUser = async (req, res) => {
 }
 
 const getAllUsers = async(req, res) => {
-    const users = await User.findAll({});
+    const users = await User.findAll({ order: db.sequelize.random() });
     res.status(200).json({  message: 'Users fetched successfully!', users: users })
 }
 

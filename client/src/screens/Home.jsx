@@ -11,6 +11,7 @@ import uploadPhotoLogo from '../assets/upload_photo_logo_logo.png'
 import uploadVideoLogo from '../assets/upload_video_logo.png'
 import { storage } from '../firebaseConfig.js'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import NoPostSticker from '../assets/no_posts_sticker.png'
 // import {formidable} from 'formidable'
 
 
@@ -45,7 +46,7 @@ const Home = () => {
         const getAllPosts = async () => {
             try{
                 setIsLoading(true)
-                const posts = await axios.get('http://127.0.0.1:8000/api/posts')   
+                const posts = await axios.get(`http://127.0.0.1:8000/api/posts/${currentUser.id}`)   
                 if(posts.status === 200)
                     setPosts(posts.data.posts)
             }catch(err){
@@ -343,15 +344,24 @@ const Home = () => {
                                 </div>
                             </div> ||
                             error && <div className='mt-5 text-center'>Error getting posts, check your internet connection or try to refresh the page!</div> ||
-                            !isLoading && !error && posts.map((post) => (
+                            posts.length > 0 ? !isLoading && !error && posts.map((post) => (
                                 <Post post={post} commentAuthor={currentUser} page='home' key={post.id} />
                             ))
+
+                            : <div>
+                                <img className='mx-auto d-block mt-3' src={NoPostSticker} width={250} height={250} /> 
+                                <p className='mt-4 text-center'>
+                                    No posts to show. Follow your fellow farmers or agri-cooperatives to view their posts in your feed.
+                                    Once followed a user refresh the page to sync their posts if they have.
+                                </p>
+                            </div> 
+                            
                         }
                     </div>
                     {/* right side */}
                     <div className='col-md-3'>
                         <div className='right-container'>
-                            <h4>Must follow</h4>
+                            <h4>Follow other users</h4>
                             {/* people */}
 
                             {

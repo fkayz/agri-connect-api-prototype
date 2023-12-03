@@ -112,8 +112,8 @@ const Post = (props) => {
             }
             {
                 props.page === 'home'
-                ? props.post.postVideo && <video className='rounded' src={props.post?.postVideo} width='100%' controls></video> 
-                : props.post.post.postVideo && <video className='rounded' src={props.post.post?.postVideo} width='100%' controls></video>
+                ? props.post.postVideo && <video className='rounded' src={props.post?.postVideo} width='100%' controls loop></video> 
+                : props.post.post.postVideo && <video className='rounded' src={props.post.post?.postVideo} width='100%' controls loop></video>
             }
             <div className='post-reactions mt-3'>
                 <div className='reaction'>
