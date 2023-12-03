@@ -10,6 +10,7 @@ const SignUp = () => {
     const navigate = useNavigate();
     
     // form data
+    const [ cooperativeName, setCooperativeName ] = useState('')
     const [ firstName, setFirstName ] = useState('')
     const [ lastName, setLastName ] = useState('');
     const [ district, setDistrict ] = useState('Balaka');
@@ -20,6 +21,7 @@ const SignUp = () => {
     const [ gender, setGender ] = useState('Male');
     const [ birthDate, setBirthDate ] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [ isFarmer, setIsFarmer ] = useState(true);
 
 
     // create a new user
@@ -47,9 +49,6 @@ const SignUp = () => {
 
         return parsedPhone
     }
-
-
-
     // sign up handle
     const signUpHandler = async (e) => {
         e.preventDefault();
@@ -57,18 +56,27 @@ const SignUp = () => {
         const parsedPhone = parsePhoneNumber(phone);
 
         const userInfo = {
-            firstName: firstName,
-            lastName: lastName,
+            firstName: isFarmer ? firstName : null,
+            lastName: isFarmer ? lastName : null,
             district: district,
             phone: parsedPhone,
             email: email,
             password: password,
-            gender: gender,
-            birthDate: birthDate,
-            role: 'farmer'
+            gender: isFarmer ? gender : null,
+            birthDate: isFarmer ? birthDate : null,
+            agriCooperativeName: !isFarmer ? cooperativeName : null,
+            role: isFarmer ? 'farmer' : 'cooperative'
         }
         
         invokeSignUpRequest(userInfo);    
+    }
+
+    const registerAsFarmer = () => {
+        setIsFarmer(true)
+    }
+
+    const registerAsCooperative = () => {
+        setIsFarmer(false)
     }
 
     const genderData = ["Male", "Female", "Others"];
@@ -78,20 +86,43 @@ const SignUp = () => {
         <div className='form-container'>
             <div className='bg-white shadow-lg rounded px-4 py-3'>
                 <h2 className='form-header font-bold mb-5 text-center'>Create an Account</h2>
-
+                <div className='d-flex mb-3'>
+                    <button className='btn btn-secondary' onClick={registerAsFarmer}>As a farmer</button>
+                    <button className='btn btn-warning' onClick={registerAsCooperative}>As an agri-cooperative</button>
+                </div>
                 <form onSubmit={signUpHandler}>
                     {/* first and last name */}
                     <div className='row'>
                         <div className='col-md-6'>
                             <div className='mb-3'>
-                                <label htmlFor='firstName' className='text-muted'>First Name</label>
-                                <input id='firstName' value={firstName} onChange={ (e) => setFirstName(e.target.value) } type='text' placeholder='John' className='form-control' />
+                                {
+                                    isFarmer && <div><label htmlFor='firstName' className='text-muted'>First Name</label>
+                                    <input id='firstName' value={firstName} onChange={ (e) => setFirstName(e.target.value) } type='text' placeholder='John' className='form-control' /></div>
+                                }
+
+                                {
+                                    !isFarmer && <div><label htmlFor='cooperativeName' className='text-muted'>Cooperative Name</label>
+                                    <input id='cooperativeName' value={cooperativeName} onChange={ (e) => setCooperativeName(e.target.value) } type='text' placeholder='SeedCo.' className='form-control' /></div>
+                                }
+                                
                             </div>
                         </div>
                         <div className='col-md-6'>
                             <div className='mb-3'>
-                                <label htmlFor='lastName' className='text-muted'>Last Name</label>
-                                <input id='lastName' value={lastName} onChange={ (e) => setLastName(e.target.value) } type='text' placeholder='Doe' className='form-control' />
+                                {
+                                    isFarmer && <div>
+                                        <label htmlFor='lastName' className='text-muted'>Last Name</label>
+                                        <input id='lastName' value={lastName} onChange={ (e) => setLastName(e.target.value) } type='text' placeholder='Doe' className='form-control' />
+                                    </div>
+                                }
+
+                                {
+                                    !isFarmer && <div>
+                                        <label htmlFor='lastName' className='text-muted'>Email</label>
+                                        <input id='lastName' value={email} onChange={ (e) => setEmail(e.target.value) } type='email' placeholder='seedco@yahoo.com' className='form-control' />
+                                    </div>
+                                }
+                                
                             </div>
                         </div>
                     </div>
@@ -111,19 +142,36 @@ const SignUp = () => {
                             </div>
                         </div>
                         <div className='col-md-6'>
-                            <div className='mb-2'>
-                                <label htmlFor='firstName' className='text-muted'>Phone</label>
-                                <input type='tel' value={phone} onChange={ (e) => setPhone(e.target.value) } pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' placeholder='Enter your phone number' className='form-control' />
-                                <small className='text-warning'>* Format: 099-456-2003</small>
-                            </div>
+                            {
+                                isFarmer && 
+                                <div className='mb-2'>
+                                    <label htmlFor='firstName' className='text-muted'>Phone</label>
+                                    <input type='tel' value={phone} onChange={ (e) => setPhone(e.target.value) } pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' placeholder='Enter your phone number' className='form-control' />
+                                    <small className='text-warning'>* Format: 099-456-2003</small>
+                                </div>
+                            }
+
+                            {
+                                !isFarmer && 
+                                <div className='mb-2'>
+                                    <label htmlFor='firstName' className='text-muted'>Telephone</label>
+                                    <input type='tel' value={phone} onChange={ (e) => setPhone(e.target.value) } pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' placeholder='Enter your telephone number' className='form-control' />
+                                    <small className='text-warning'>* Format: 011-456-2003</small>
+                                </div>
+                            }
+                            
                         </div>
                     </div>
 
                     {/* email */}
-                    <div className='mb-3'>
-                        <label htmlFor="email" className='text-muted'>Email</label>
-                        <input type='email' value={email} onChange={ (e) => setEmail(e.target.value) } id='email' placeholder='johndoe@gmail.com' className='form-control' />
-                    </div>
+                    {
+                        isFarmer 
+                        &&
+                        <div className='mb-3'>
+                            <label htmlFor="email" className='text-muted'>Email</label>
+                            <input type='email' value={email} onChange={ (e) => setEmail(e.target.value) } id='email' placeholder='johndoe@gmail.com' className='form-control' />
+                        </div>
+                    }
                     
                     {/* password and confirm password */}
                     <div className='row'>
@@ -142,7 +190,8 @@ const SignUp = () => {
                     </div>
 
                     {/* gender and birth date */}
-                    <div className='row'>
+                    {
+                        isFarmer && <div className='row'>
                         <div className='col-md-6'>
                             <div className='mb-3'>
                                 <label htmlFor='gender' className='text-muted'>Gender</label>
@@ -162,6 +211,7 @@ const SignUp = () => {
                             </div>
                         </div>
                     </div>
+                    }
 
                     {/* submit button */}
                     {

@@ -625,3 +625,8 @@ article{
 .product-img{
     object-fit: cover;
 }
+
+.paypal-buttons{
+    display: flex;
+    justify-content: center;
+}

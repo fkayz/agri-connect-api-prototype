@@ -64,6 +64,7 @@ module.exports = (sequelize, DataTypes, Model) => {
 
         birthDate: {
             type: DataTypes.DATE,
+            allowNull: true,
             validate: {
                 isBefore: '2004-01-01',
                 isAfter: '1970-01-01'

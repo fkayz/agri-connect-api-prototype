@@ -38,7 +38,7 @@ const getAllPosts = async(req, res) => {
     const newUsers = [1,2,3, ...followed_users_id_list]
     console.log('followed user id list', newUsers)
     const posts = await Post.findAll({ 
-        where: { post_author_id: { [Op.in]: [0, ...followed_users_id_list] }},
+        where: { post_author_id: { [Op.in]: [...followed_users_id_list] }},
         include: [ User, Like, {model: Comment, include: [User]} ],
         order: [['createdAt', 'DESC']],  
     });

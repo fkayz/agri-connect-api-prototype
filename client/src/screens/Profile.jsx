@@ -131,7 +131,11 @@ const Profile = () => {
                             {/* profile info */}
                             <div className='profile-container'>
                                 <img data-bs-toggle="modal" data-bs-target="#updateProfilePic" className='profile-pic mx-auto d-block rounded-circle' src={currentUser.profilePic} width={300} height={300} />
-                                <p className="profile-fullname text-center mt-3 mb-0">{ currentUser.firstName + ' ' + currentUser.lastName }</p>
+                                <p className="profile-fullname text-center mt-3 mb-0">
+                                    {
+                                        currentUser.firstName ? currentUser.firstName + ' ' + currentUser.lastName : currentUser.agriCooperativeName
+                                    }
+                                </p>
                                 <p className='text-center text-muted'>{ currentUser.email }</p> 
                                 <div className='profile-menu mb-5'>
                                     <button className='btn btn-dark text-white' href='#'>Posts</button>
@@ -144,7 +148,9 @@ const Profile = () => {
                                 currentUser.posts?.length > 0
                                 ? 
                                 <div className='row'>
-                                    <h3 className='mb-4'>{`${currentUser.firstName} ${currentUser.lastName}'s posts (${currentUser.posts.length})`}</h3>
+                                    <h3 className='mb-4'>
+                                        {`${currentUser.firstName ? currentUser.firstName : currentUser.agriCooperativeName} ${currentUser.lastName ? currentUser.lastName : ''}'s posts (${currentUser.posts.length})`}
+                                    </h3>
                                     {
                                         currentUser.posts.map((post) => (
                                             <div className='col-md-6'>
@@ -165,7 +171,7 @@ const Profile = () => {
                                         ))
                                     }
                                 </div>
-                                : <p className='no-posts bg-warning p-3 text-center rounded'>{`${currentUser.firstName} ${currentUser.lastName} has not yet posted anything!`}</p>
+                                : <p className='no-posts bg-warning p-3 text-center rounded'>{`${currentUser.firstName ? currentUser.firstName : currentUser.agriCooperativeName} ${currentUser.lastName ? currentUser.lastName : ''} has not yet posted anything!`}</p>
                             }
                             
                         </div>

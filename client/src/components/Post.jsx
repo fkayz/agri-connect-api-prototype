@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const Post = (props) => {
@@ -8,6 +8,22 @@ const Post = (props) => {
 
     const [ newPostComment, setNewPostComment ] = useState('')
     const [ isLoading, setIsLoading ] = useState(false)
+    const [ likedPost, setLikedPost ] = useState(false)
+    const [ postLikedId, setPostLikedId ] = useState()
+    const [ likeHeartClass, setLikeHeartClass ] = useState("icon fa-regular fa-heart mt-3")
+
+    useEffect(() => {
+        // const userLikedPostList = props.post.likes
+        // const userLikedPostIDList = []
+        // userLikedPostList.map((like) => userLikedPostIDList.push(like.user_id))
+
+        // if user is in post likes then set the post to liked by default
+        // if(userLikedPostIDList.includes(props.commentAuthor.id)) {
+        //     console.log('user liked this post already', props.post.id)
+        //     setPostLikedId(props.post.id)
+        //     setLikedPost(true)
+        // }
+    }, [])
 
     const createNewPostCommentHandle = async (e) => {
         // e.preventDefault()
@@ -70,6 +86,43 @@ const Post = (props) => {
         }
     }
 
+    const handleLikePost = async (e, postID) => {
+        if(!likedPost){
+            try{
+                const likesInfo = {
+                    user_id: props.commentAuthor.id,
+                    post_id: postID
+                }
+                const like = await axios.post('http://127.0.0.1:8000/api/likes/add', likesInfo)
+
+                if(like.status === 200){
+                    setPostLikedId(like.data.like.id)
+                    setLikeHeartClass('icon fa-solid fa-heart mt-3')
+                    console.log('liked post', postID)
+                }
+            }catch(err){
+                alert('There was an error perfoming the action. Try again later!')
+                console.log('error liking post', err)
+            }
+            setLikedPost(true)
+        }else{
+            try{
+                const deleteLike = await axios.delete(`http://127.0.0.1:8000/api/likes/delete/${postLikedId}`)
+
+                if(deleteLike.status === 200){
+                    setLikeHeartClass('icon fa-regular fa-heart mt-3')
+                    console.log('unliked post', postID)
+                }
+            }catch(err){
+                alert('There was an error perfoming the action. Try again later!')
+                console.log('error liking post', err)
+            }
+            setLikedPost(false)
+        }
+    }
+
+    // console.log('post info', props.post)
+
   return (
     <>
         <div className='post-card mt-5 mb-5 bg-white p-3'>
@@ -117,7 +170,10 @@ const Post = (props) => {
             }
             <div className='post-reactions mt-3'>
                 <div className='reaction'>
-                    <span><i className='icon fa fa-regular fa-heart mt-3'></i></span>
+                    {
+                        props.page === 'home' && <span onClick={(e)=>handleLikePost(e, props.post.id)}><i className={likeHeartClass}></i></span> ||
+                        props.page === 'saved' && <span onClick={(e)=>handleLikePost(e, props.post.post.id)}><i className={likeHeartClass}></i></span>
+                    } 
                     <p className='mt-3'>{ props.page === 'home' ? props.post?.likes.length : props.post.post?.likes.length }</p>
                 </div>
 

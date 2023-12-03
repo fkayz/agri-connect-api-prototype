@@ -73,7 +73,10 @@ const AddProduct = () => {
 
     const saveToDB = (event) => {
         event.preventDefault()
-        uploadProductImageToFirebase(productImg)
+        if(productImg && productName && productPrice)
+            uploadProductImageToFirebase(productImg)
+        else
+            alert('Error: provide product details to create a product.')
     }
 
     const previewProductImage = (img) => {

@@ -272,7 +272,7 @@ const Home = () => {
     // chatbot
 
     const initializeGPT = async () => {
-        const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true })
+        const openai = new OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true })
         
         try{
             setChabotLoader(true)
