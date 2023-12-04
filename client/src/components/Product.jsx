@@ -1,6 +1,5 @@
 import React from 'react'
-import { PayPalButtons } from "@paypal/react-paypal-js";
-
+import Paypal from '../components/Paypal'
 const Product = (props) => {
 
     console.log('product', props.product)
@@ -50,7 +49,7 @@ const Product = (props) => {
         <p className='mt-2'><b>MWK</b> { props.product.price }</p>
         {
             props.page === 'productDetail' 
-            ? props.product.product_status?.status !== 'sold' ? <div className='paypal-buttons'><PayPalButtons /></div> : ''
+            ? props.product.product_status?.status !== 'sold' ? <div className='paypal-buttons'><Paypal product={props.product} /></div> : ''
             : <a href={product_link} className='btn btn-warning mx-auto d-block mt-3'>Purchase Product</a>
 
         }

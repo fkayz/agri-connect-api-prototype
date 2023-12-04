@@ -37,7 +37,7 @@ db.communities = require('./Community')(sequelize, DataTypes, Model);
 db.messages = require('./Message')(sequelize, DataTypes, Model);
 db.followers = require('../models/Follower')(sequelize, DataTypes, Model)
 db.saved_posts = require('../models/SavedPosts')(sequelize, DataTypes, Model)
-//db.community_participants = require('./CommunityParticipant')(sequelize, DataTypes, Model);
+db.community_participants = require('./CommunityParticipant')(sequelize, DataTypes, Model);
 
 
 db.sequelize.sync({ force: false, alter: true })
@@ -91,9 +91,13 @@ db.followers.belongsTo(db.users, { foreignKey: 'follower_id' });
 db.users.hasOne(db.followers, { foreignKey: 'followed_id' });
 db.followers.belongsTo(db.users, { foreignKey: 'followed_id' });
 
-// // communities -> participants(many communities has many participant & vice versa)
-// db.communities.hasMany(db.community_participants, { foreignKey: 'community_id' });
-// db.users.belongsTo(db.community_participants, { foreignKey: 'user_id' });
+// communities -> participants(many communities has many participant & vice versa)
+db.communities.hasMany(db.community_participants, { foreignKey: 'community_id' });
+db.community_participants.belongsTo(db.communities, { foreignKey: 'community_id' });
+
+// community participants has many users
+db.users.hasMany(db.community_participants, { foreignKey: 'user_id' });
+db.community_participants.belongsTo(db.users, { foreignKey: 'user_id' });
 
 
 // communities -> messages(community has many messages)

@@ -1,18 +1,19 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import SideNavBar from '../components/SideNavBar';
-import groupPhoto from '../assets/agri-logo.png';
 import { useState, useEffect }  from 'react';
 import axios from 'axios';
+import getCookie from '../hooks/getCookie';
 import Group from '../components/Group'
 
 
 const Groups = () => {
 
     const [ groupsData, setGroups ] = useState([])
+    const [ currentUser, setCurrentUser ] = useState(JSON.parse(getCookie('currentUser')))
+    const [ groupParticipants, setGroupParticipants ] = useState([])
     const [ isLoading, setIsLoading ] = useState(false);
     const [ error, setError ] = useState(false);
-
 
     useEffect(() => {
         const getAllGroups = async () => {
@@ -31,9 +32,27 @@ const Groups = () => {
                 setIsLoading(false)
             }
         }
+
+        const getAllCommunityParticipants = async () => {
+            try{
+                const participants = await axios.get(`http://127.0.0.1:8000/api/community_participant`)
+                
+                if(participants.status === 200){
+                    setGroupParticipants(participants.data.communities)
+                    // console.log('participants', participants.data.communities)
+                }
+            }catch(err){
+                alert('There was un-expected error')
+                console.log(err)
+            }
+        }
         getAllGroups();
+        getAllCommunityParticipants()
     }, []);
 
+    let groupParticipantsids = groupParticipants.map((usr) => usr.community_id)
+
+    console.log('grp participants', groupParticipantsids)
 
     return (
         <>
@@ -45,6 +64,9 @@ const Groups = () => {
                     </div>
                     <div className='col-md-9'>
                     <h1 className='text-muted mb-4'>Groups</h1>
+                        {
+                            currentUser.agriCooperativeName && <a href='/groups/add' className='btn btn-success mb-3'>Create New Group</a>
+                        }
                         <div className='row'>
                             {/* group 1 */}
                             
@@ -65,7 +87,8 @@ const Groups = () => {
                                 ||
 
                                 isLoading === false && error === false && groupsData.map((group) => (
-                                    <Group group={group} />
+                                    <Group group={group} currentUser={currentUser}  />
+                                    // participantsIDs={groupParticipantsids}
                                 ))
                             }
                             

@@ -171,7 +171,7 @@ const Profile = () => {
                                         ))
                                     }
                                 </div>
-                                : <p className='no-posts bg-warning p-3 text-center rounded'>{`${currentUser.firstName ? currentUser.firstName : currentUser.agriCooperativeName} ${currentUser.lastName ? currentUser.lastName : ''} has not yet posted anything!`}</p>
+                                : <p className='no-posts bg-warning p-3 text-center rounded'>{`${currentUser.firstName ? currentUser.firstName : currentUser.agriCooperativeName} ${currentUser.lastName ? currentUser.lastName : ' '} has not yet posted anything!`}</p>
                             }
                             
                         </div>

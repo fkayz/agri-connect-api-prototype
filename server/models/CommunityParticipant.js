@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes, Model) => {
             type: DataTypes.BIGINT,
             allowNull: false,
             primaryKey: true,
-            autoIncrement: true
+            autoIncrement: true,
+            unsigned: true
         }
     }, { sequelize, modelName: 'community_participant' });
 

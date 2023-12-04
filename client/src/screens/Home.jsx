@@ -37,6 +37,10 @@ const Home = () => {
     const [ chatbotOutput, setChatBotOutput ] = useState('Generated answers will be displayed here')
     const [ chatbotLoader, setChabotLoader ] = useState(false)
 
+    const [ joinedGroups, setJoinedGroups ] = useState([])
+    const [ joinedGrpsLoading, setJoinedGrpsLoading ] = useState(false)
+    const [ fetchJoinedGrpsError, setFetchJoinedGrpsError ] = useState(false)
+
     let postImageLink = ''
     let postVideoLink = ''
 
@@ -95,12 +99,30 @@ const Home = () => {
             }
         }
 
+        const getAllJoinedGroups = async () => {
+            try{
+                setJoinedGrpsLoading(true)
+                const grpz = await axios.get(`http://127.0.0.1:8000/api/community_participant/all/${currentUser.id}`)
+                
+                if(grpz.status === 200){
+                    setJoinedGroups(grpz.data.communities)
+                }
+            }catch(err){
+                console.log('error joining group', err)
+            }finally{
+                setJoinedGrpsLoading(false)
+            }
+        }
+
         getAllPosts() // fetching all posts
         getAllFollowedUsers() // fetch all the users the logged in user is following
         getAllUsers() // fetch all users
+        getAllJoinedGroups()
     }, [])
 
     let followedUsersIDs = []
+
+    console.log('joined groups', joinedGroups)
 
     if(isLoadFetchFollowedUsrs === false && errorFetchFollowedUsrs === false) {
         followedUsersIDs = followedUsersList?.map((user) => user.followed_id)

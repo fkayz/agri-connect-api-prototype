@@ -16,7 +16,10 @@ const GroupChat = () => {
     const [ error, setError ] = useState(false)
 
     const [ communityDetails, setCommunityDetails ] = useState('')
+    const [ communityParticipants, setCommunityParticipants ] = useState('')
     const [ communityLoading, setCommunityLoading ] = useState(false)
+    const [ communityParticipantsLoading, setCommunityParticipantsLoading ] = useState(false)
+    const [ communityParticipantsError, setCommunityParticipantsError ] = useState(false)
     const [ communityError, setCommunityError ] = useState(false)
 
     const [ currentUser, setCurrentUser ] = useState(JSON.parse(getCookie('currentUser')))
@@ -63,7 +66,25 @@ const GroupChat = () => {
             }
         }
 
+        const getCommunityParticipants = async () => {
+            try{
+                setCommunityParticipantsLoading(true)
+                const participants = await axios.get(`http://127.0.0.1:8000/api/community_participant/${groupChatID.id}`)
+                
+                if(participants.status === 200){
+                    setCommunityParticipants(participants)
+                }
+            }catch(err){
+                alert('There was a problem getting participants. Try to refresh the page.')
+                console.log(err)
+                setCommunityParticipantsError(false)
+            }finally{
+                setCommunityParticipantsLoading(false)
+            }
+        }
+
         getCommunityDetails()
+        getCommunityParticipants()
         getAllChatMessages()
 
     }, [syncMessages])
@@ -119,8 +140,8 @@ const GroupChat = () => {
                                         <p>Error getting group info, try refreshing the page or check your connection</p>
                                         ||
                                         !communityLoading && !communityError
-                                        &&
-                                        <GroupInfo communityDetails={communityDetails} />
+                                        && !communityParticipantsLoading && !communityParticipantsError &&
+                                        <GroupInfo communityDetails={communityDetails} communityParticipants={communityParticipants}  />
                                     }
                                     {/* <i className='fa fa-ellipsis-vertical'></i> */}
                                 </div>

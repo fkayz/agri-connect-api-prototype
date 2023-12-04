@@ -11,6 +11,7 @@ import ProductDetail from './screens/ProductDetail'
 import AddProduct from './screens/AddProduct'
 import Cart from './screens/Cart'
 import GroupChat from './screens/GroupChat'
+import AddGroup from './screens/AddGroup'
 import { Saved } from './screens/Saved'
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
@@ -33,6 +34,7 @@ const App = () => {
               <Route exact path="/product/cart" element={<Cart />}></Route>
               <Route exact path="/groups/chat/:id" element={<GroupChat />}></Route>
               <Route exact path="/posts/saved/:id" element={<Saved />}></Route>
+              <Route exact path="/groups/add" element={<AddGroup />}></Route>
             </Routes>
         </Router>
       </PayPalScriptProvider>
