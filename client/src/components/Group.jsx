@@ -39,10 +39,10 @@ const Group = (props) => {
             <div className='group-top-part'>
                 <img src={props.group.profileCover} width={50} height={50} className='group-profile rounded-circle' />
                 <div className='group-info'>
-                    <p className='group-name mb-0'>{ props.group.name }</p>
+                    <p className='group-name mb-0'>{ props.group?.name }</p>
                     <div className='group-specs'>
-                        <p>{ props.group.user.agriCooperativeName}</p>
-                        <p className='group-members-total text-success'>132.7k members</p>
+                        <p>{ props.group.user?.agriCooperativeName}</p>
+                        {/* <p className='group-members-total text-success'>132.7k members</p> */}
                     </div>
                 </div>
             </div>

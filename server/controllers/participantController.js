@@ -34,6 +34,13 @@ const getAllCommunityParticipants = async(req, res) => {
     res.status(200).json({ messageStatus: 'Communities fetched successfully!', communities: communities });
 }
 
+const getAllCommunityParticipantss = async(req, res) => {
+    const communities = await CommunityParticipant.findAll({ 
+        include: [User, Community],
+    });
+    res.status(200).json({ messageStatus: 'Communities fetched successfully!', communities: communities });
+}
+
 const getOneCommunityParticipant = async(req, res) => {
     const communityParticipant = await CommunityParticipant.findOne({ where: {id: req.params.id} });
     res.status(200).json({ messageStatus: 'Community fetched successfully!', communityParticipant: communityParticipant });
@@ -60,6 +67,7 @@ module.exports = {
     getAllCommunityParticipants,
     getOneCommunityParticipant,
     updateCommunityParticipant,
-    deleteCommunityParticipant
+    deleteCommunityParticipant,
+    getAllCommunityParticipantss
 }
 

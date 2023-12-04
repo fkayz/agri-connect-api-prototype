@@ -4,6 +4,7 @@ const communityParticipantController = require('../controllers/participantContro
 
 
 router.get('/all/:id', communityParticipantController.getAllCommunityParticipants);
+router.get('/', communityParticipantController.getAllCommunityParticipantss);
 router.get('/:id', communityParticipantController.getAllCommunityParticipant);
 router.get('/:id', communityParticipantController.getOneCommunityParticipant);
 router.post('/add', communityParticipantController.addCommunityParticipant);

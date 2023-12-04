@@ -38,7 +38,7 @@ const Product = (props) => {
             : <img src={props.product.productImage} width={435} height={300} className='product-img rounded' />
         }
         
-        <p className='product-name text-muted mt-3'>{props.product.name}</p>
+        <p className='product-name text-muted mt-3'>{props.product?.name}</p>
 
         {
             props.product.product_status?.status === 'new' && <div className='product-status-badge bg-success text-white p-2'>New</div> ||
@@ -46,7 +46,7 @@ const Product = (props) => {
             props.product.product_status?.status === 'available' && <div className='product-status-badge bg-info text-white p-2'>Available</div>
         }
 
-        <p className='mt-2'><b>MWK</b> { props.product.price }</p>
+        <p className='mt-2'><b>MWK</b> { props.product?.price }</p>
         {
             props.page === 'productDetail' 
             ? props.product.product_status?.status !== 'sold' ? <div className='paypal-buttons'><Paypal product={props.product} /></div> : ''

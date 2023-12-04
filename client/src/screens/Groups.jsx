@@ -35,7 +35,7 @@ const Groups = () => {
 
         const getAllCommunityParticipants = async () => {
             try{
-                const participants = await axios.get(`http://127.0.0.1:8000/api/community_participant`)
+                const participants = await axios.get(`http://127.0.0.1:8000/api/community_participant/`)
                 
                 if(participants.status === 200){
                     setGroupParticipants(participants.data.communities)
